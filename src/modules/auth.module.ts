@@ -12,7 +12,7 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'tu-super-secreto-cambiar-en-produccion',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '10m' },
     }),
     PassportModule,
@@ -21,4 +21,4 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }
