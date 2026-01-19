@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: serplantas_db
     ports:
       - "5455:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   backend:
     build: .
@@ -21,12 +23,10 @@ services:
       - DB_USER=serplantas
       - DB_PASSWORD=serplantas123
       - DB_NAME=serplantas_db
-      - JWT_SECRET=clave_secreta_inventada
+      - JWT_SECRET=29fe7c6c464846a0953ef8626cfeb6e8
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - postgres_data:/var/lib/postgresql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U serplantas" ]
       interval: 10s
