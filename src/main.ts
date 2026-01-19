@@ -20,7 +20,8 @@ async function bootstrap() {
 
   // Habilitar CORS
   app.enableCors({
-    origin: '*',
+    origin: ['https://prymovile.web.app', 'http://localhost:5050', '*'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
