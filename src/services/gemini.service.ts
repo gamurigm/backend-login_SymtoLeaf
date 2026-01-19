@@ -49,7 +49,7 @@ export class GeminiService {
         imageBuffer: Buffer,
         prompt: string,
         mimeType: string = 'image/jpeg'
-    ): Promise<string> {
+    ): Promise<any> {
         try {
             const visionModel = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
@@ -64,16 +64,26 @@ export class GeminiService {
             const response = await result.response;
             const text = response.text();
 
+            // Intentar parsear JSON si la respuesta parece JSON
+            let output: any = text;
+            try {
+                const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                output = JSON.parse(cleanJson);
+            } catch (e) {
+                // Si no es JSON, devolvemos el texto plano
+                console.warn('AI did not return valid JSON:', text);
+            }
+
             // Guardar historial
             await this.historyRepository.save({
                 userId,
                 type: AiInteractionType.DIAGNOSIS,
                 input: prompt,
-                output: text,
+                output: typeof output === 'string' ? output : JSON.stringify(output),
                 metadata: { hasImage: true, mimeType },
             });
 
-            return text;
+            return output;
         } catch (error) {
             console.error('Error analyzing image with Gemini:', error);
             throw new InternalServerErrorException('Failed to analyze image');
