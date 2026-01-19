@@ -5,6 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth.module';
 import { User } from './entities/user.entity';
+import { AiHistory } from './entities/ai-history.entity';
+
+
+import { GeminiModule } from './modules/gemini.module';
 
 @Module({
   imports: [
@@ -21,12 +25,13 @@ import { User } from './entities/user.entity';
         username: configService.get<string>('DB_USER') || 'serplantas',
         password: configService.get<string>('DB_PASSWORD') || 'serplantas123',
         database: configService.get<string>('DB_NAME') || 'serplantas_db',
-        entities: [User],
+        entities: [User, AiHistory],
         synchronize: true, // ¡Cuidado! En producción real esto debería ser false
         logging: true,
       }),
     }),
     AuthModule,
+    GeminiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

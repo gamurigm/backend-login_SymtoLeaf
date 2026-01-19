@@ -18,9 +18,9 @@ async function bootstrap() {
     }),
   );
 
-  // Habilitar CORS
+  // Habilitar CORS restrictivo pero funcional para Web
   app.enableCors({
-    origin: ['https://prymovile.web.app', 'http://localhost:5050', '*'],
+    origin: true, // Esto refleja el 'Origin' del request, permitiendo cualquier origen
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

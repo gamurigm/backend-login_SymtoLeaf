@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { AiHistory } from './ai-history.entity';
 
 @Entity('users')
 export class User {
@@ -46,4 +48,7 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => AiHistory, (history) => history.user)
+  history: AiHistory[];
 }
