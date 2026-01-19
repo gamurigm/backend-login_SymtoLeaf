@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,20 +11,24 @@ import { User } from './entities/user.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432'),
-      username: process.env.DB_USER || 'serplantas',
-      password: process.env.DB_PASSWORD || 'serplantas123',
-      database: process.env.DB_NAME || 'serplantas_db',
-      entities: [User],
-      synchronize: true,
-      logging: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST') || 'localhost',
+        port: configService.get<number>('DB_PORT') || 5432,
+        username: configService.get<string>('DB_USER') || 'serplantas',
+        password: configService.get<string>('DB_PASSWORD') || 'serplantas123',
+        database: configService.get<string>('DB_NAME') || 'serplantas_db',
+        entities: [User],
+        synchronize: true, // ¡Cuidado! En producción real esto debería ser false
+        logging: true,
+      }),
     }),
     AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
