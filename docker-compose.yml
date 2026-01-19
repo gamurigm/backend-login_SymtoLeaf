@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: serplantas_db
+    environment:
+      POSTGRES_USER: serplantas
+      POSTGRES_PASSWORD: serplantas123
+      POSTGRES_DB: serplantas_db
+    ports:
+      - "5455:5432"
+
+  backend:
+    build: .
+    container_name: serplantas_backend
+    ports:
+      - "5050:5050"
+    environment:
+      - PORT=5050
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=serplantas
+      - DB_PASSWORD=serplantas123
+      - DB_NAME=serplantas_db
+      - JWT_SECRET=clave_secreta_inventada
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U serplantas" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,0 +1,135 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "SerPlantas Auth API",
+  "dateExport": "2024-01-15",
+  "version": "1.1",
+  "folders": [
+    {
+      "name": "Authentication",
+      "_id": "auth-folder",
+      "requests": [
+        {
+          "_id": "register",
+          "name": "Register User",
+          "method": "POST",
+          "url": "{{base_url}}/auth/register",
+          "body": {
+            "firstName": "Juan",
+            "secondName": "Carlos",
+            "lastName": "González",
+            "secondLastName": "Rodríguez",
+            "email": "juan@example.com",
+            "password": "Seguro123!"
+          },
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "_id": "login",
+          "name": "Login",
+          "method": "POST",
+          "url": "{{base_url}}/auth/login",
+          "body": {
+            "username": "jgonzález",
+            "password": "Seguro123!"
+          },
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "_id": "setup-2fa",
+          "name": "Setup 2FA - Get QR Code",
+          "method": "GET",
+          "url": "{{base_url}}/auth/2fa/setup",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{access_token}}"
+            }
+          ]
+        },
+        {
+          "_id": "enable-2fa",
+          "name": "Enable 2FA",
+          "method": "POST",
+          "url": "{{base_url}}/auth/2fa/enable",
+          "body": {
+            "code": "123456"
+          },
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{access_token}}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "_id": "login-2fa",
+          "name": "Login with 2FA",
+          "method": "POST",
+          "url": "{{base_url}}/auth/login-2fa",
+          "body": {
+            "token": "{{temp_token}}",
+            "code": "123456"
+          },
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        {
+          "_id": "profile",
+          "name": "Get Profile",
+          "method": "GET",
+          "url": "{{base_url}}/auth/profile",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{access_token}}"
+            }
+          ]
+        },
+        {
+          "_id": "logout",
+          "name": "Logout",
+          "method": "POST",
+          "url": "{{base_url}}/auth/logout",
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{access_token}}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "name": "base_url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "name": "access_token",
+      "value": "tu-token-aqui"
+    },
+    {
+      "name": "temp_token",
+      "value": "tu-token-temporal-aqui"
+    }
+  ]
+}
